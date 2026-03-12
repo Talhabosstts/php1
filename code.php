@@ -1,55 +1,27 @@
 <?php
 
-include 'connection.php';
+$con = mysqli_connect('localhost','root','','file_uploading');
 
-if(isset($_POST['register'])){
+if(isset($_POST('upload'))){
+$image_name = $_FILES['file']['name'];
+$tmp_name = $_FILES['file']['tmp_name'];
+$image_size = $_FILES['file']['size'];
+$image_type =strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
 
+$destination = 'images/'.$image_name;
 
-$name =$_POST['name'];
-$email =$_POST['email'];
-$pass =$_POST['password'];
-$address =$_POST['address'];
+if($image_size <=5000000){
 
-
-
-// echo $name .'<br>'.$email.'<br>'.$pass .'<br>'.$address;
-$insert = mysqli_query($con, "INSERT into register(name, email, password, address)VALUES
-
-
-('$name','$email','$pass','$address')");
-
-if($insert){
-    header('location: register.php');
-}
-
-
-
-}
-
-// update start
-
-if(isset($_POST['update'])){
-
-
-$name =$_POST['name'];
-$email =$_POST['email'];
-$pass =$_POST['password'];
-$address =$_POST['address'];
-
-
-$update = mysqli_query($con,"update register set name = '$name',email ='$email'
-,password='$password',address='$address' where id='$id'"); 
-
-if($update){
-    echo "<script>
-    alert('data update succesfully');
-    location.assign('fetch.php');
-    </script>";
+if($image_type == 'jpg '||$image_type == 'jpeg' || $image_type == 'png'){
+    if(move_uploaded_file($tmp_name,$destination)){
+        $query = mysqli_query($con , "INSERT INTO file(file) VAlUES ('$image_name')");
     }
+
+}
 }
 
-// update end
 
 
+}
 
 ?>
