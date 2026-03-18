@@ -1,0 +1,26 @@
+<?php
+
+$con = mysqli_connect('localhost','root','','file_uploading');
+
+if(isset($_POST['upload'])){
+$image_name = $_FILES['file']['name'];
+$tmp_name = $_FILES['file']['tmp_name'];
+$image_size = $_FILES['file']['size'];
+$image_type =strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
+
+g$destination = 'images/'.$image_name;
+
+if($image_size <=5000000){
+
+if($image_type == 'jpg '||$image_type == 'jpeg' || $image_type == 'png'){
+    if(move_uploaded_file($tmp_name,$destination)){
+        $query = mysqli_query($con , "INSERT INTO file(file) VAlUES ('$image_name')");
+     }
+
+ }
+
+}
+
+}
+
+?>
